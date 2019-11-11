@@ -3,7 +3,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return "Welcome!"
+    return render_template('index.html')
 
 @app.route('/campaign_finance_data/<state>', methods=['GET'])
 def campaign_finance_data(state):
