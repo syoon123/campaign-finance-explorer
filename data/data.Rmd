@@ -1,0 +1,26 @@
+---
+title: "dataextraction"
+output: html_document
+---
+
+```{extraction}
+summary(cars)
+```
+
+## Including Plots
+
+Candidates
+
+```{r pressure, echo=FALSE}
+library(readr)
+cands <- read_delim("data/cands.txt", "|", 
++     escape_double = FALSE, trim_ws = TRUE)
+cn <- read_delim("data/cn.txt", "|", escape_double = FALSE, 
++     trim_ws = TRUE)
+```
+
+Merge data
+```{r,echo=FALSE}
+data <- merge(cands,cn,by = 'CAND_ID')
+data_2020 <- data[data$'CAND_ELECTION_YR' == "2020",]
+```
