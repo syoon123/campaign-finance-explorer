@@ -5,11 +5,9 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route('/campaign_finance_data/<state>', methods=['GET'])
-def campaign_finance_data(state):
-    state = state
-    return render_template('campaign_finance_data.html', state=state)
-
+@app.route('/presidential/')
+def presidential():
+    return render_template('presidential.html')
 
 if __name__ == '__main__':
     app.run()

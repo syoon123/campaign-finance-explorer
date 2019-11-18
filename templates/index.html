@@ -2,27 +2,39 @@
 
 {% block content %}
 <div id="page-wrapper">
-  <div class="selector">
-    <div class="row">
-      <div class="col-sm-6">
-	<div class="card">
-	  <div class="card-body">
-            <h5 class="card-title">Federal</h5>
-            <p class="card-text">Look at fundraising/spending data for presidential, House and Senate campaigns.</p>
-            <a href="#" class="btn btn-primary">Start exploring</a>
-	  </div>
-	</div>
-      </div>
-      <div class="col-sm-6">
-	<div class="card">
-	  <div class="card-body">
-            <h5 class="card-title">State-Level</h5>
-            <p class="card-text">Look at fundraising/spending data for candidates running for state legislature.</p>
-            <a href="#" class="btn btn-success">Start exploring</a>
-	  </div>
-	</div>
+  <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+	<li class="breadcrumb-item active" aria-current="page">Home</li>
+      </ol>
+  </nav>
+  
+  <div class="card-deck">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Presidential</h5>
+        <p class="card-text">View fundraising/spending data for presidential campaigns.</p>
+	<br>
+        <a href="{{ url_for('presidential') }}" class="btn btn-warning">Start exploring</a>
       </div>
     </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">House</h5>
+        <p class="card-text">View fundraising/spending data for candidates running for the House of Representatives.</p>
+        <a href="#" class="btn btn-primary">Start exploring</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Senate</h5>
+        <p class="card-text">View fundraising/spending data for candidates running for Senate.</p>
+	<br>
+        <a href="#" class="btn btn-success">Start exploring</a>
+      </div>
+    </div>
+      
   </div>
 </div>
 {% endblock %}
