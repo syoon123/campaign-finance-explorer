@@ -7,10 +7,25 @@
     <title>Campaign Finance Explorer</title>
 
     <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
     <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
   </head>
   <body>
-    {% block content %}
-    {% endblock %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" role="navigation">
+      <div class="navbar-header">
+	<a class="navbar-brand" href="{{ url_for('index') }}">Campaign Finance Explorer</a>
+      </div>
+      <div class="collapse navbar-collapse">
+	<ul class="navbar-nav mr-auto">
+	  <li class="nav-item">
+	    <a class="nav-link" href="#">Support</a>
+	  </li>
+	</ul>
+      </div>
+    </nav>
+    <main role="main" class="container">
+      {% block content %}
+      {% endblock %}
+    </main>
   </body>
 </html>
