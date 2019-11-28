@@ -41,11 +41,15 @@ def get_campaign_finance_data(candidate_id, candidate_name):
     data = requests.get(url).json()['results'][0]
     receipts = int((data['receipts'] + data['other_receipts']) * 100) / 100
     disbursements = int((data['disbursements'] + data['other_disbursements']) * 100) / 100
+    if receipts == 0:
+        burn_rate = 0.0
+    else:
+        burn_rate = disbursements/receipts
     totals = {
         'receipts': receipts,
         'disbursements': disbursements,
         'cash_on_hand': receipts - disbursements,
-        'burn_rate': disbursements/receipts ? receipts!=0.0 : 0.0,
+        'burn_rate': burn_rate
     }
     breakdown = {
         'big_donations': int(data['individual_itemized_contributions'] * 100) / 100,
@@ -76,7 +80,7 @@ def cash_on_hand_stacked_bar_graph(office, state=None, party=None):
                   title="Money Raised/Spent by Each Candidate",
                   toolbar_location=None,
                   tools="hover",
-                  tooltips="$name @candidate_names: @$name{(0.00)}")
+                  tooltips="$name @candidate_names: @$name{($ 0,0.00)}")
     plot.vbar_stack(portions,
                     x='candidate_names',
                     width=0.9, color=colors, source=data, legend_label=portions)
@@ -90,3 +94,33 @@ def cash_on_hand_stacked_bar_graph(office, state=None, party=None):
     plot.legend.location = "top_left"
     plot.legend.orientation = "horizontal"
     return plot
+
+
+def burn_rate_bar_graph(office, state=None, party=None):
+    candidates = get_candidates(office, state, party)
+    data = {'candidate_names': [],
+            'Burn Rate': [],}
+    for candidate_id in candidates:
+        try:
+            candidate_data = get_campaign_finance_data(candidate_id, candidates[candidate_id])
+            data['candidate_names'].append(candidate_data['name'])
+            data['Burn Rate'].append(candidate_data['totals']['burn_rate'])
+        except:
+            continue
+    plot = figure(x_range=data['candidate_names'],
+                  plot_height=600,
+                  plot_width=700,
+                  title="Burn Rates for Each Candidate",
+                  toolbar_location=None,
+                  tools="hover",
+                  tooltips="Burn rate for @candidate_names: @{Burn Rate}{(0.0 %)}")
+    plot.vbar(x='candidate_names', top='Burn Rate', width=0.9, fill_color='#f55f3d', line_color="#f55f3d", source=data)
+    plot.y_range.start = 0
+    plot.x_range.range_padding = 0.1
+    plot.xaxis.major_label_orientation = math.pi/2
+    plot.xgrid.grid_line_color = None
+    plot.yaxis.formatter.use_scientific = False
+    plot.axis.minor_tick_line_color = None
+    plot.outline_line_color = None
+    return plot
+
