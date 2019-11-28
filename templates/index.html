@@ -2,11 +2,14 @@
 
 {% block content %}
 <div id="page-wrapper">
-  <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-	<li class="breadcrumb-item active" aria-current="page">Home</li>
-      </ol>
-  </nav>
+
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">Campaign Finance, Made Digestible</h1>
+      <p class="text-muted">Whether you're a journalist making election predictions, or working for a campaign and keeping tabs on other candidates, or just trying to stay informed as a voter, tracking how candidates running for office in this country, and the committees supporting them, raise and spend funds is key to understanding the health and strategy of each campaign. The Federal Election Commission (FEC) makes this data public but navigating their website is cumbersome, and conceptualizing what's going on in an election from the figures presented is difficult.</p>
+      <p class="text-muted">Different publications will sometimes put out their own visualizations, which are helpful but only reflect the data scraped at that point in time, despite the continued utility of such vizualizations. To solve this, this Campaign Finance Explorer aims to make use of the FEC API to provide visualizations that are useful and up-to-date for each election cycle.</p>
+    </div>
+  </section>
   
   <div class="card-deck">
     <div class="card">
@@ -22,7 +25,7 @@
       <div class="card-body">
         <h5 class="card-title">House</h5>
         <p class="card-text">View fundraising/spending data for candidates running for the House of Representatives.</p>
-        <a href="#" class="btn btn-primary">Start exploring</a>
+        <a href="{{ url_for('house') }}" class="btn btn-primary">Start exploring</a>
       </div>
     </div>
 
