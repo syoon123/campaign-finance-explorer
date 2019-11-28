@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="page-wrapper">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+      {% if state is not defined %}
+      <li class="breadcrumb-item active" aria-current="page">{{ campaign_type }} Campaigns</li>
+      {% else %}
+      <li class="breadcrumb-item">
+	<a href="{{ url_for(campaign_type[0].lower() + campaign_type[1:]) }}">
+	  {{ campaign_type }} Campaigns
+	</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">{{ state }}</li>
+      {% endif %}
+    </ol>
+  </nav>
+  {{ cash_on_hand_div|safe }}
+  <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-1.4.0.min.js"></script>
+  {{ cash_on_hand_script|safe }}
+  <div class="card" style="width: 18rem; z-index: 5; margin-left: 720px; margin-top: -600px; position: absolute;">
+    <div class="card-body">
+      <h5 class="card-title">Cash on hand/Disbursements</h5>
+      <p class="card-text">The height of each bar represents the amount of money raised by each candidate's campaign. The portion of each bar that has been grayed out is the amount that has been spent, and the portion that is green is the campaign's remaining cash on hand.</p>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><a href="{{ base }}/burnrates/">View burn rates</a></li>
+      <li class="list-group-item"><a href="{{ base }}?party=DEM">View Democratic candidates only</a></li>
+      <li class="list-group-item"><a href="{{ base }}?party=REP">View Republican candidates only</a></li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

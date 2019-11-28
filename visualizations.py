@@ -1,7 +1,7 @@
 import requests
 import math
 
-from bokeh.models import HoverTool
+from bokeh.models import HoverTool, NumeralTickFormatter
 from bokeh.io import show, output_file
 from bokeh.plotting import figure
 
@@ -119,7 +119,7 @@ def burn_rate_bar_graph(office, state=None, party=None):
     plot.x_range.range_padding = 0.1
     plot.xaxis.major_label_orientation = math.pi/2
     plot.xgrid.grid_line_color = None
-    plot.yaxis.formatter.use_scientific = False
+    plot.yaxis.formatter = NumeralTickFormatter(format='0.0 %')
     plot.axis.minor_tick_line_color = None
     plot.outline_line_color = None
     return plot

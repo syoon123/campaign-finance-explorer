@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="page-wrapper">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">House Campaigns</li>
+    </ol>
+  </nav>
+  <div class="text-center" style="position:relative;">
+    <iframe src="https://createaclickablemap.com/map.php?&id=87006&maplocation=false&online=true" width="900" height="525" style="border: none;"></iframe>
+  </div>
+</div>
+{% endblock %}
