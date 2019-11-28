@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="page-wrapper">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+      {% if state is not defined %}
+      <li class="breadcrumb-item"><a href="{{ base }}">{{ campaign_type }} Campaigns</a></li>
+      {% else %}
+      <li class="breadcrumb-item">
+	<a href="{{ url_for(campaign_type[0].lower() + campaign_type[1:]) }}">
+	  {{ campaign_type }} Campaigns
+	</a>
+      </li>
+      <li class="breadcrumb-item"><a href="{{ base }}">{{ state }}</a></li>
+      {% endif %}
+      <li class="breadcrumb-item active" aria-current="page">{{ candidate_name }}</li>
+    </ol>
+  </nav>
+  {{ funding_pie_div|safe }}
+  <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-1.4.0.min.js"></script>
+  {{ funding_pie_script|safe }}
+  <div class="card" style="width: 18rem; z-index: 5; margin-left: 720px; margin-top: -600px; position: absolute;">
+    <div class="card-body">
+      <h5 class="card-title">Breakdown of Funding for {{ candidate_name }}</h5>
+      <hr>
+      <h6 class="card-subtitle">Party: {{ candidate_party }}</h6><br>
+      <h6 class="card-subtitle">Total Receipts: ${{ candidate_total_receipts }}</h6>
+      <hr>
+      <p class="card-text">This pie chart shows the portions of the candidate's total money raised that have come from big donors, small donors, and transfers (funds may be transferred between authorized committees of the same candidate, ex. from a previous campaign to a current campaign committee).</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

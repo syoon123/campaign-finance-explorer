@@ -4,6 +4,8 @@ import math
 from bokeh.models import HoverTool, NumeralTickFormatter
 from bokeh.io import show, output_file
 from bokeh.plotting import figure
+from bokeh.transform import cumsum
+import pandas as pd
 
 API_KEY = "PXwofAIOrHnlY4D2tImllz22JVUiRmigH9XQwgpm"
 CANDIDATES_REQUEST_URL = "https://api.open.fec.gov/v1/candidates/totals/?election_year=2020&is_active_candidate=true&min_receipts=1000000&sort=receipts&api_key={api_key}&sort_null_only=false&sort_hide_null=false&per_page=100".format(api_key=API_KEY)
@@ -34,8 +36,8 @@ def get_candidates(office, state=None, party=None):
 
 def get_campaign_finance_data(candidate_id, candidate_name):
     """
-    Params: candidate_id, candidate_name
-    Returns: dictionary with candidate's totals (receipts, disbursements, and cash on hand)
+    Params: candidate_id
+    Returns: dictionary with candidate's name and totals (receipts, disbursements, and cash on hand)
     """
     url = "https://api.open.fec.gov/v1/candidate/{cand_id}/totals/?page=1&sort_null_only=false&sort_nulls_last=false&cycle=2020&api_key={api_key}&sort=-cycle&per_page=20&sort_hide_null=false".format(api_key=API_KEY, cand_id=candidate_id)
     data = requests.get(url).json()['results'][0]
@@ -124,3 +126,33 @@ def burn_rate_bar_graph(office, state=None, party=None):
     plot.outline_line_color = None
     return plot
 
+
+def candidate_funding_pie_chart(candidate_id):
+    url = "https://api.open.fec.gov/v1/candidate/{cand_id}/?page=1&sort_null_only=false&sort_nulls_last=false&api_key={api_key}&sort_hide_null=false".format(api_key=API_KEY, cand_id=candidate_id)
+    candidate_name = requests.get(url).json()['results'][0]['name']
+    candidate_party = requests.get(url).json()['results'][0]['party']
+    data = get_campaign_finance_data(candidate_id, candidate_name)
+    total_receipts = data['totals']['receipts']
+    x = {
+        'Big Donations': data['breakdown']['big_donations'],
+        'Small Donations': data['breakdown']['small_donations'],
+        'Transfers': data['breakdown']['transfers'],
+    }
+    x['Other'] = total_receipts - \
+       (x['Big Donations'] + x['Small Donations'] + x['Transfers'])
+    data = pd.Series(x).reset_index(name='value').rename(columns={'index':'portion'})
+    data['angle'] = data['value']/data['value'].sum() * 2* math.pi
+    data['color'] = ["#D55E00","#0072B2", "#F0E442", "#009E73"]
+    plot = figure(plot_height=600, plot_width=700,
+                  title="", toolbar_location=None,
+                  tools="hover", tooltips="@portion: $@value{0.00}", x_range=(-0.5, 1.0))
+    plot.wedge(x=0.1, y=0.1, radius=0.5,
+               start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'),
+               line_color="white", fill_color='color',
+               legend_field='portion',
+               source=data)
+    plot.axis.axis_label=None
+    plot.axis.visible=False
+    plot.grid.grid_line_color = None
+    return candidate_name, candidate_party, total_receipts, plot
+    

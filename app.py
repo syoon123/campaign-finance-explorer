@@ -96,6 +96,32 @@ def senate_burn_rates(state):
                            burn_rates_div=burn_rates_div)
 
 
+@app.route('/<office>/candidates/<candidate_id>', defaults={'state': None})
+@app.route('/<office>/<state>/candidates/<candidate_id>')           
+def individual_candidate(office, state, candidate_id):
+    name, party, total_receipts, plot = visualizations.candidate_funding_pie_chart(candidate_id)
+    funding_pie_script, funding_pie_div = components(plot)
+    campaign_type=office[0].upper() + office[1:]
+    if state is None:
+        return render_template('candidate.html',
+                               candidate_name=name,
+                               candidate_party=party,
+                               candidate_total_receipts=total_receipts,
+                               campaign_type=campaign_type,
+                               base='/{office}'.format(office=office),
+                               funding_pie_script=funding_pie_script,
+                               funding_pie_div=funding_pie_div)
+    return render_template('candidate.html',
+                           candidate_name=name,
+                           candidate_party=party,
+                           candidate_total_receipts=total_receipts,
+                           campaign_type=campaign_type,
+                           state=state,
+                           base='/{office}/{state}'.format(office=office, state=state),
+                           funding_pie_script=funding_pie_script,
+                           funding_pie_div=funding_pie_div)
+                           
+
 
 if __name__ == '__main__':
     app.run()
